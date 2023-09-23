@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.video-container {
+   width: 200px;
+   max-height: 200px;
+    margin: 0 auto;
+}
+
+video {
+    width: 100%;
+    display: block;
+    background-color: #000;
+    object-fit: cover;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+progress {
+    width: 100%;
+}
+
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="custom-video" controls>
+            <source src="unlock-video.mp4" type="video/mp4">
+            <p>Your browser doesn't support HTML5 video. <a href="sample.mp4">Download it here</a></p>
+        </video>
+        <div class="controls">
+    <button id="play-pause-button">Play</button>
+    <p>Volume</p>
+    <input id="volume-control" type="range" min="0" max="1" step="0.01" value="1">
+    <button id="fullscreen-button">Fullscreen</button>
+    <p>time</p>
+    <progress id="progress-bar" value="0" max="100"></progress>
+</div>
+
+    </div>
+    <script>
+      const video = document.getElementById('custom-video');
+const playPauseButton = document.getElementById('play-pause-button');
+const volumeControl = document.getElementById('volume-control');
+const progressBar = document.getElementById('progress-bar');
+const fullscreenButton = document.getElementById('fullscreen-button'); // Add this line
+
+playPauseButton.addEventListener('click', togglePlayPause);
+volumeControl.addEventListener('input', adjustVolume);
+video.addEventListener('timeupdate', updateProgressBar);
+progressBar.addEventListener('input', seekVideo);
+fullscreenButton.addEventListener('click', toggleFullscreen); // Add this line
+
+function toggleFullscreen() { // Add this function
+    if (!document.fullscreenElement) {
+        video.requestFullscreen();
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+
+// Rest of your existing code...
+
+function togglePlayPause() {
+    if (video.paused) {
+        video.play();
+        playPauseButton.textContent = 'Pause';
+    } else {
+        video.pause();
+        playPauseButton.textContent = 'Play';
+    }
+}
+
+function adjustVolume() {
+    video.volume = volumeControl.value;
+}
+
+function updateProgressBar() {
+    const currentTime = video.currentTime;
+    const duration = video.duration;
+    const percentage = (currentTime / duration) * 100;
+    progressBar.value = percentage;
+}
+
+function seekVideo() {
+    const seekTime = (progressBar.value / 100) * video.duration;
+    video.currentTime = seekTime;
+}
+
+    </script>
+</body>
+</html>
